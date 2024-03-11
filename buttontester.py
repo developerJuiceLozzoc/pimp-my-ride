@@ -10,8 +10,22 @@ from adafruit_mcp3xxx.analog_in import AnalogIn
 spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
 cs = digitalio.DigitalInOut(board.D5)
 mcp = MCP.MCP3008(spi, cs)
+def flatten_number(num):
+    while num > 9:
+        num = sum(int(digit) for digit in str(num))
+    return num
+def convertBrightnessToFloat(b):
+    analogBrightness = (b / 6) * (0.3 - 0.001) + 0.001
+    return analogBrightness
 
+def leading_significant_figure(number):
+    # Convert the number to a string
+    num_str = str(number)
 
+    # Get the first character of the string (leading significant figure)
+    leading_figure = int(num_str[0])
+
+    return leading_figure
 
 channel = AnalogIn(mcp, MCP.P0)
 
@@ -41,7 +55,7 @@ try:
             switch_state[switch_pin] = GPIO.input(switch_pin)
 
         print(switch_state)
-        print('Raw ADC Value: ', channel.value)
+        print('rawvalue: ',channel.value,'flattened: ', flatten_number(channel.value),"sigfig", leading_significant_figure(channel.value), "brightness", convertBrightnessToFloat(flatten_number(channel.value)))
 
         # Delay to avoid continuous polling
         time.sleep(0.1)

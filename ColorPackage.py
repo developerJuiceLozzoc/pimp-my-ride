@@ -56,6 +56,11 @@ def colorSet(forArgument):
     return (transition, gradient)
 
 
+# brightness is a floating point number ranging from 0-1
+def setBrightness(brightness):
+    PIXEL_BOARD.brightness = brightness
+    print("brightness", PIXEL_BOARD.brightness)
+
 @fire_and_forget
 def animationFunction(argument, voltage):
     if voltage:
@@ -66,8 +71,7 @@ def animationFunction(argument, voltage):
 
     transition, gradient = colorSet(argument)
     grunt = bindTransition(transition)
-    print("animation functionf", (argument, voltage))
-    # first we say helllo
+     # first we say helllo
     PIXEL_BOARD.fill((0,0,0))
     grunt()
     PIXEL_BOARD.fill((0,0,0))
